@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Insertion Sort</title>
+	<script src = "p5/p5.min.js"></script>
+	<script src = "sort_utilities.js"></script>
+	<script>
+	var setup = function(){
+		createCanvas(window.innerWidth-10,window.innerHeight-10);
+		//randomSeed(350);
+		//array.sort(function(a,b){return a-b;});
+		//nearlySort(array);
+	}
+	function perfectPivot(a,l,h){
+        var freqs = {};
+        var res = [];
+        for (var i = l; i < h;i++){
+            freqs[a[i]] = freqs[a[i]] || i;
+        }
+        var keys = Object.keys(freqs);//.sort(function(a,b){return a-b;});
+        //var pivIndex = freqs[keys[parseInt(keys.length/2,10)]] || Math.floor(l + (Math.random() * (h-l)));
+        var pivIndex = keys[Math.floor(keys.length/2)];
+        return freqs[pivIndex];
+    }
+    function partition (a,l,h,p){
+    	var selected = l;
+    	/*var i = l;
+    	for (i = l; i < h;i++){
+    		if (a[selected] > a[i]){
+    			selected = i;
+    		}
+    	}*/
+        var pos = p?p:Math.floor((l+h)/2,10);
+        swap(a,l,pos);
+        var pivot = a[l];
+        var left = l + 1;
+        var right = h;
+        
+        
+        while (left <= right){
+            while (a[left] > pivot){
+                left += 1;
+            }
+            while (a[right] < pivot){
+                right -= 1;
+            }
+            if (left <= right){
+                swap(a,right,left);
+                left += 1;
+                right -= 1;
+            }
+        }
+        swap(a,l,right);
+        return right;
+    }
+	function insertion_sort(array){
+		for (var i = 0;i < array.length;i++){
+			var t = array[i];
+			var f;
+			for (f = i;f > 0 && t > array[f-1]; f--){
+				array[f] = array[f-1];
+			}
+			array[f] = t;
+		}
+	}
+	function single_loop_insertion_sort (array) {
+		var i = 0;
+		var f = 0;
+		var t = array[0];
+		while (i < array.length){
+			if (f > 0 && t > array[f-1]){
+				array[f] = array[f-1];
+				f--;
+			} else {
+				array[f] = t;
+				i++;
+				f = i;
+				t = array[i];
+			}
+		}
+	}
+	//partition(array,0,array.length-1,perfectPivot(array,0,array.length));
+	//nearlySort(array,20);
+	var i = 0;
+	var f = 0;
+	var array = new DisplayAbleArray(array);
+	var t = array.array[0];
+	//single_loop_insertion_sort(array);
+	var draw = function(){
+		background(0);
+		//displayArray(array,this,i,f);
+		array.display(this);
+		/*
+		if (i < array.length ){
+			var count = 0;
+	        if (array[i-1] >= array[i]){
+	            // for descending sort, use >= for comparison
+	            i = j
+	            j = j + 1 
+	        } else if (array[i-1] < array[i]) {
+            	swap(array,i-1,i);
+            	i = i - 1
+	            if (i === 0){
+	                i = j;
+	                j = j + 1;
+	            }
+	        }
+		}*/
+		var cc = 0;
+		if (i < array.length){
+			if (f > 0 && t > array.get(f-1)){
+				//array[f] = array[f-1];
+				array.set(f,array.get(f-1));
+				f--;
+			} else {
+				array.set(f,t);
+				//array[f] = t;
+				i++;
+				f = i;
+				t = array.get(i);
+			}
+		}
+	}
+	</script>
+</head>
+<body style = "background-color:rgb(0,0,0);">
+
+</body>
+</html>
