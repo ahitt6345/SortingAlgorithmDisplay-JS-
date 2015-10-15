@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Quick Sort</title>
+	<script src = "p5/p5.min.js"></script>
+	<script src = "sort_utilities.js"></script>
+	<script>
+    
+	function quickSort(array,l,m){
+		var p = partition(array,l,m);
+		if (l < p-1){
+          	quickSort(array, l, p-1);
+        }
+  		if (p+1 < m){
+          	quickSort(array,p+1, m);
+        }
+	}
+    function insertion_sort(a,l,m){
+        for (var i = l; i < m;i++){
+            for (var f = i; f >= 0 && array[f] < array[f+1]; f--){
+                swap(a,f,f+1);
+            }
+        }
+    }
+    function fatPartition(a,i,j,p){
+        if (j < i){return;}
+        var gt = j;
+        var index = parseInt(i + (j-i)/2,10);
+        var v = p ? p : index;
+        v = a[i];
+        var lt = i;
+        while (i <= gt){
+           var cmp = a[i] > (v);
+            if (cmp ===true) {
+                swap(a, lt++, i++);
+            } else if (cmp===false) {
+                while (a[gt]>(v)) {
+                  gt--;
+                }
+                swap(a, i, gt--);
+            }
+            else{
+                i++;
+            }
+        }
+        return [lt,gt];
+    }
+    function perfectPivot(a,l,h){
+        var freqs = {};
+        var res = [];
+        for (var i = l; i < h;i++){
+            freqs[a[i]] = freqs[a[i]] || i;
+        }
+        var keys = Object.keys(freqs);//.sort(function(a,b){return a-b;});
+        //var pivIndex = freqs[keys[parseInt(keys.length/2,10)]] || Math.floor(l + (Math.random() * (h-l)));
+        var pivIndex = keys[Math.floor((keys.length/2))];
+        return freqs[pivIndex];
+    }
+    var Spartition = function(a,l,m){
+        var pos = Math.floor((m+l)/2);
+        var part = a[pos];
+        var i;
+        var f;
+        for (i = 0,f=a.length-1; i <= f;){
+            while (a[i] > part){
+                i++;
+            } while (a[f] < part){
+                f--;
+            } if (f >= i){
+                swap(a,i,f);
+                i++,
+                f--;
+            }
+        }
+        return parseInt((f+i)/2,10);
+    }
+    var simpleQuickSort =function (a){
+        for (var i = 0; i < a.length;i++){
+            Spartition(a,i);
+        }
+    }
+    function partition (a,l,h,p){
+    	var selected = l;
+    	/*var i = l;
+    	for (i = l; i < h;i++){
+    		if (a[selected] > a[i]){
+    			selected = i;
+    		}
+    	}*/
+        var pos = p?p:Math.floor((l+h)/2,10);
+        swap(a,l,pos);
+        var pivot = a[l];
+        var left = l + 1;
+        var right = h;
+        
+        
+        while (left <= right){
+            while (a[left] > pivot){
+                left += 1;
+            }
+            while (a[right] < pivot){
+                right -= 1;
+            }
+            if (left <= right){
+                swap(a,right,left);
+                left += 1;
+                right -= 1;
+            }
+        }
+        swap(a,l,right);
+        return right;
+    }
+function quicksortDraw(p){
+    p.setup= function(){
+        p.createCanvas(window.innerWidth-10,window.innerHeight-10);
+    }
+//var array = createIntArray(100,100);
+    var insertionPartition = false;
+    var simple = !true;
+    var stack = [0,array.length-1];
+    var ind = 0;
+    var part = {};
+    part.conditions = {};
+    part.conditions.initNumbers = true;
+    part.conditions.partitioning = false;
+    part.conditions.fillStack = false;
+    var slowPart= !false;
+    part.numbers = {};
+    part.numbers.right=0;
+    part.numbers.left=0;
+    var m=0,l=0;
+    var i = 1;
+    var j = 2;
+    var arrAccesses = 0;
+    var Arr = new DisplayAbleArray(array);
+    p.draw = function() {
+        p.background(0);
+        //displayArray(array,p,part.numbers.right,part.numbers.left,l,m);
+        Arr.display(p);
+        if (part.conditions.initNumbers === true && slowPart===true){
+            if (stack.length === 0){
+                part.conditions.initNumbers = false;
+                console.log(arrAccesses);
+                return;
+            }
+            m = stack.pop();
+            l = stack.pop();
+            part.numbers.m = m;
+            part.numbers.l = l;
+            i = l;
+            j = i+1;
+            part.numbers.left = l+1;
+            part.numbers.right = m;
+            var mid = //l + Math.floor(Math.random() * (m-l));
+            perfectPivot(Arr.array,part.numbers.l,part.numbers.m);
+            part.numbers.p = mid;
+            Arr.swap(part.numbers.l,part.numbers.p);
+            //swap(array,part.numbers.l,part.numbers.p);
+            part.numbers.pivot = Arr.get(l);
+            part.conditions.initNumbers = false;
+            part.conditions.partitioning = true;
+        } if (part.conditions.partitioning === true&& slowPart=== true ){
+            var ll = 0;
+            while (part.numbers.left <= part.numbers.right && ll++ < 1
+                ){
+                var changed = false;
+                Arr.get(part.numbers.left);
+                Arr.get(part.numbers.right);
+                if (Arr.get(part.numbers.left) > part.numbers.pivot){
+                    part.numbers.left++;
+                    continue;
+                }
+
+                if (Arr.get(part.numbers.right) < part.numbers.pivot){
+                    part.numbers.right--;
+                    continue;
+                }
+                if (part.numbers.left <= part.numbers.right){
+                    //swap(array,part.numbers.right,part.numbers.left);
+                    Arr.swap(part.numbers.left,part.numbers.right);
+                    part.numbers.left++;
+                    part.numbers.right--;
+                }
+            } if (part.numbers.left > part.numbers.right){
+                Arr.swap(part.numbers.l,part.numbers.right);
+                //swap(array,part.numbers.l,part.numbers.right);
+                part.numbers.p = part.numbers.right;
+                part.conditions.partitioning = false;
+                part.conditions.fillStack = true;
+            }
+        } if (part.conditions.fillStack === true && slowPart === true){
+            if ( part.numbers.p-1 > part.numbers.l ){
+                stack.push(part.numbers.l,part.numbers.p-1);
+            } if ( part.numbers.p+1 < part.numbers.m ){
+                stack.push( part.numbers.p+1,part.numbers.m);
+            }                 
+            
+            part.conditions.fillStack = false;
+            part.conditions.initNumbers = true;
+            //displayArray(array);
+        } else if (slowPart === false){
+            if (stack.length === 0){noLoop();}
+            m = stack.pop();
+            l = stack.pop();
+            //if (m > l){
+            pa = partition(array,l,m,perfectPivot(array,l,m)
+                );
+            
+                               
+                if ( pa+1 < m ){
+                    stack.push(pa+1,m);
+                }if ( pa-1 > l ){
+                    stack.push(l,pa-1);
+                }  
+            //}
+        }
+    }
+}
+var quicksort = new p5(quicksortDraw);
+	</script>
+</head>
+<body style = "background-color:rgb(0,0,0);">
+
+</body>
+</html>
