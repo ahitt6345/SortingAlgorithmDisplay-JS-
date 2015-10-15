@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Bubble Sort</title>
+	<script src = "p5/p5.min.js"></script>
+	<script src = "sort_utilities.js"></script>
+	<script>
+	function setup(){
+		createCanvas(window.innerWidth-10,window.innerHeight-10);
+	}
+	var count = 0;
+	var i = 0;
+	var array = new DisplayAbleArray(array);
+	function draw(){
+		background(0);
+		array.display(this);
+		for (var l = 0; l < 1  && i <= array.length-count; l ++){
+				if (array.get(i) < array.get(i+1)){
+					array.swap(i,i+1);
+				}
+			i++;
+		}
+		if (i > array.length-count){
+			i = 0;
+			count++;
+		}
+		if (count >= array.length){
+			count = 0;
+			shuffle(array,true);
+		}
+	}
+	</script>
+</head>
+<body style = "background-color:rgb(0,0,0);">
+
+</body>
+</html>
