@@ -16,8 +16,8 @@ function draw(){
 	background(0);
 	i++;
 	array.display(this);
-	var cc = 0;
-	while (cc++ < 1){
+	var actionsPerFrame = 0;
+	while (actionsPerFrame++ < 1){
 		x = Math.abs(Math.floor(Math.random() * (array.length)));
 		y = Math.abs(Math.floor(Math.random() * (array.length)));
 		array.swap(x,y);
